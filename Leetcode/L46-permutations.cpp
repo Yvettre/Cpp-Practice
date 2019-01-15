@@ -57,3 +57,31 @@ vector<vector<int>> permute(vector<int>& nums) {
 
 	return res;
 }
+
+
+/*
+返回没有重复的全排列
+1. 如果需要放到前缀位置的元素（当前前缀）和当前前缀相等，则不需要排
+2. 如果需要放到前缀位置的元素之前没有与自己重复的元素，则需要排，否则不排
+*/
+bool chkUnique(vector<int> nums, size_t left, size_t j) {
+  for (size_t k=left; k<j; ++k) {
+    if (nums[k]==nums[j]) return false;
+  }
+  return true;
+}
+
+void permUnique(vector<int>& nums, size_t left, size_t right, vector<vector<int>>& res){
+  if (left==right) {
+    res.push_back(nums);
+  }
+  else {
+    for (size_t j=left; j<=right; ++j){
+      if ( (nums[j]!=nums[left] || j==left) && chkUnique(nums, left, j)){
+        swap(nums[j], nums[left]);
+        permUnique(nums, left+1, right, res);
+        swap(nums[j], nums[left]);
+      }
+    }
+  }
+}
